@@ -8,11 +8,11 @@ public class Task4 {
         inputString = scn.next();
         scn.close();
 
-        StringBuilder palindromeInputString = new StringBuilder();
+        StringBuilder palindromeInputString = new StringBuilder(inputString);
         palindromeInputString.reverse();
 
 
-        if(inputString.equals(palindromeInputString.toString())){
+        if(inputString.equalsIgnoreCase(palindromeInputString.toString())){
             System.out.println("The input string is a palindrome");
         }else{
             System.out.println("The input string is not a palindrome");
