@@ -1,4 +1,8 @@
-package klickpay.src.main.java.com.klickpay.model;
+package src.klickpay.model;
+
+import java.util.Map;
+import java.util.HashMap;
+
 
 public class UserModel {
     private long ID;
@@ -11,6 +15,8 @@ public class UserModel {
     private int failedAttempts = 0;
     private long lockoutEndTime = 0;
     private static final long LOCKOUT_DURATION_MS = 60 * 1000;
+
+    private Map<String, TransactionModel> transactionMap = new HashMap<>();
 
     public UserModel(long ID, String name, String email, String number,  String pin){
         this.ID = ID;
@@ -32,12 +38,13 @@ public class UserModel {
     public double getBalance() { return balance; }
 
 
-    public int getFailedAttempts() {
-        return failedAttempts;
-    }
+    public int getFailedAttempts() { return failedAttempts; }
 
-    public void incrementFailedAttempts() {
-        this.failedAttempts++;
+    public void incrementFailedAttempts() { this.failedAttempts++; }
+
+    public Map<String, TransactionModel> getTransactions() { return transactionMap; }
+    public void addTransaction(TransactionModel transaction) {
+        this.transactionMap.put(transaction.getTransactionId(), transaction);
     }
 
     public boolean isLocked() {
@@ -59,9 +66,7 @@ public class UserModel {
         return 0;
     }
 
-    public void triggerLockout() {
-        this.lockoutEndTime = System.currentTimeMillis() + LOCKOUT_DURATION_MS;
-    }
+    public void triggerLockout() { this.lockoutEndTime = System.currentTimeMillis() + LOCKOUT_DURATION_MS; }
 
     public void resetLockout() {
         this.failedAttempts = 0;
