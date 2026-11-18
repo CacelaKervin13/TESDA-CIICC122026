@@ -11,10 +11,15 @@ public class UserAuthentication {
 
     private UserModel loggedInUser = null;
 
-    public boolean registerUser(String name, String email, String number, String pin) {
+    public void registerUser(String name, String email, String number, String pin) {
         if (userDatabase.containsKey(email)) {
             System.out.println("\nRegistration failed: User with email " + email + " already exists.");
-            return false;
+            return;
+        }
+
+        if (getUserByNumber(number) != null) {
+            System.out.println("\nRegistration failed: Mobile number is already registered.");
+            return;
         }
 
         long autoID = idCounter++;
@@ -22,21 +27,20 @@ public class UserAuthentication {
         UserModel newUser = new UserModel(autoID, name, email, number, pin);
         userDatabase.put(email, newUser);
         System.out.println("\nRegistration successful! welcome to Klickpay");
-        return true;
     }
 
-    public UserModel login(String email, String pin) {
+    public void login(String email, String pin) {
         UserModel user = userDatabase.get(email);
 
         if (user == null) {
             System.out.println("\nLogin failed: No account with this email.");
-            return null;
+            return;
         }
 
         if (user.isLocked()) {
             long remainingSeconds = user.getRemainingLockoutTimeSeconds();
             System.out.println("\nLogin failed: Account is locked. Please try again in " + remainingSeconds + " second(s).");
-            return null;
+            return;
         }
 
         if (!user.getPin().equals(pin)) {
@@ -49,12 +53,12 @@ public class UserAuthentication {
             } else {
                 System.out.println("\nLogin failed: Incorrect PIN. You have " + remainingAttempts + " attempt(s) left.");
             }
-            return null;
+            return;
         }
 
         loggedInUser = user;
+        user.resetLockout();
         System.out.println("\nLogin successful. Welcome, " + user.getName() + "!");
-        return loggedInUser;
     }
 
     public void logout() {
@@ -66,27 +70,26 @@ public class UserAuthentication {
         }
     }
 
-    public boolean changePin(String email, String oldPin, String newPin) {
+    public void changePin(String email, String oldPin, String newPin) {
         UserModel user = userDatabase.get(email);
 
         if (user == null) {
             System.out.println("\nError: User not found.");
-            return false;
+            return;
         }
 
         if (!user.getPin().equals(oldPin)) {
             System.out.println("\nPIN change failed: Current PIN is incorrect.");
-            return false;
+            return;
         }
 
         if (newPin == null || newPin.trim().isEmpty()) {
             System.out.println("\nPIN change failed: New PIN cannot be empty.");
-            return false;
+            return;
         }
 
         user.setPin(newPin);
         System.out.println("\nPIN updated successfully.");
-        return true;
     }
 
     public UserModel getUserByNumber(String number) {
@@ -100,3 +103,5 @@ public class UserAuthentication {
 
     public UserModel getLoggedInUser() { return loggedInUser; }
 }
+
+

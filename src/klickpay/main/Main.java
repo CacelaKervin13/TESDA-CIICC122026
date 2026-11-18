@@ -27,7 +27,8 @@ public class Main {
                 System.out.println("2. Login");
                 System.out.println("3. Exit");
             } else {
-                System.out.println("Status: [ LOGGED IN AS: " + currentUser.getName() + " | Balance: ₱" + currentUser.getBalance() + " ]");
+                System.out.println("Status: [ LOGGED IN AS: " + currentUser.getName() + 
+                " | Balance: ₱" + currentUser.getBalance() + " ]");
                 System.out.println("1. Deposit Money");
                 System.out.println("2. Transfer Money");
                 System.out.println("3. View Transaction History");
@@ -61,7 +62,7 @@ public class Main {
                         System.out.print("Enter PIN: ");
                         String loginPin = scanner.nextLine().trim();
                         auth.login(loginEmail, loginPin);
-                        continue;
+                        break;
 
                     case "3":
                         isRunning = false;

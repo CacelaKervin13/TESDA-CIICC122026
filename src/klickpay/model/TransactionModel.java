@@ -27,3 +27,5 @@ public class TransactionModel {
 
     public String getNumberDetails() { return numberDetails; }
 }
+
+

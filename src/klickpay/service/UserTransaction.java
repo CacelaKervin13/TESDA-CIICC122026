@@ -28,10 +28,10 @@ public class UserTransaction {
         }
     }
 
-    public boolean deposit(UserModel user, double amount) {
+    public void deposit(UserModel user, double amount) {
         if (amount <= 0) {
             System.out.println("\nDeposit failed: Amount must be greater than zero.");
-            return false;
+            return;
         }
 
         user.setBalance(user.getBalance() + amount);
@@ -42,28 +42,27 @@ public class UserTransaction {
         user.addTransaction(transaction);
 
         System.out.println("\nSuccessfully deposited ₱" + amount + ". New balance: ₱" + user.getBalance());
-        return true;
     }
 
-    public boolean transfer(UserModel sender, UserModel recipient, double amount) {
+    public void transfer(UserModel sender, UserModel recipient, double amount) {
         if (amount <= 0) {
             System.out.println("\nTransfer failed: Amount must be greater than zero.");
-            return false;
+            return;
         }
 
         if (recipient == null) {
             System.out.println("\nTransfer failed: Recipient account does not exist.");
-            return false;
+            return;
         }
         
         if (sender.getNumber().equals(recipient.getNumber())) {
             System.out.println("\nTransfer failed: You cannot transfer money to your own account.");
-            return false;
+            return;
         }
 
         if (sender.getBalance() < amount) {
             System.out.println("\nTransfer failed: Insufficient balance.");
-            return false;
+            return;
         }
 
         // Record sender transaction
@@ -80,6 +79,7 @@ public class UserTransaction {
 
         System.out.println("\nSuccessfully transferred ₱" + amount + " to " + recipient.getName() + ".");
         System.out.println("Your new balance: ₱" + sender.getBalance());
-        return true;
     }
 }
+
+
